@@ -1,0 +1,26 @@
+создание пользователей:
+user1 = User.objects.create_user('Пользователь1')
+user2 = User.objects.create_user('Пользователь2')
+
+
+создание авторов
+
+author1 = Author.objects.create(user=user1)
+author2 = Author.objects.create(user=user2)
+
+
+
+создание категорий
+category1 = Category.objects.create(category='Спорт')
+category2 = Category.objects.create(category='IT NEWS')
+category3 = Category.objects.create(category='Политика')
+category4 = Category.objects.create(category='Погода')
+
+
+созданиие новостей,
+
+post1 = Post.objects.create(autor_id=1, type="NW", title_news="Заголовок 1", text_news="Новость1" )
+
+
+
+
