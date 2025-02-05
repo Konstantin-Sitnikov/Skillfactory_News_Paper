@@ -1,3 +1,9 @@
+﻿import 
+from django.contrib.auth.models import User
+from news.models import *
+
+
+
 создание пользователей:
 user1 = User.objects.create_user('Пользователь1')
 user2 = User.objects.create_user('Пользователь2')
@@ -19,8 +25,42 @@ category4 = Category.objects.create(category='Погода')
 
 созданиие новостей,
 
-post1 = Post.objects.create(autor_id=1, type="NW", title_news="Заголовок 1", text_news="Новость1" )
+post1 = Post.objects.create(autor_id=author1, type="NW", title_news="Заголовок 1", text_news="Новость1" )
 
+Post.objects.create(autor_id=author1, type="NW", title_news="Политика-Экономика ", text_news="какая то новость" )
+Post.objects.create(autor_id=author1, type="NW", title_news="Погода", text_news="Новости погоды" )
+Post.objects.create(autor_id=author2, type="NW", title_news="Новости IT", text_news="Последние новости в IT" )
+Post.objects.create(autor_id=author2, type="AR", title_news="Статья Спорт", text_news="Статья про спорт" )
+Post.objects.create(autor_id=author1, type="AR", title_news="Статья Экономика ", text_news="небольшая статья" )
+Post.objects.create(autor_id=author2, type="NW", title_news="Политика-IT", text_news="Что то с IT и политикой" )
+
+создание связей пост-категория
+pc1 = PostCategory.objects.create(post_id=post1, category_id=sport)
+pc2 = PostCategory.objects.create(post_id=post1, category_id=politics)
+
+
+
+создание коментария
+
+comment1 = Comment.objects.create(post_id = post1, user_id = user1, text_comment = "Какой-то комтарий")
+
+
+получение категорий
+
+sport = Category.objects.get(category='Спорт')
+it_news = Category.objects.get(category='IT NEWS')
+politics = Category.objects.get(category='Политика')
+weather = Category.objects.get(category='Погода')
+
+
+
+
+получение авторов из БД
+
+author1 = Author.objects.get(pk=1)
+
+фильтр новостей по категории спорт
+news = Post.objects.filter(category=sport)
 
 
 

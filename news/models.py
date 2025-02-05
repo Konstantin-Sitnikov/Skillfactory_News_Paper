@@ -32,15 +32,15 @@ class Post(models.Model):
     _rating_post = models.IntegerField(default = 0, db_column='rating_post')
 
     def like(self):
-        self._rating += 1
+        self._rating_post += 1
         self.save()
 
     def dislike(self):
-        self._rating -= 1
+        self._rating_post -= 1
         self.save()
 
     def preview(self):
-        return self.text[0:123] + "..."
+        return self.text_news[0:123] + "..."
 
 
 class PostCategory(models.Model):
@@ -56,10 +56,10 @@ class Comment(models.Model):
     _rating_comments = models.IntegerField(default=0, db_column='rating_comments')
 
     def like(self):
-        self._rating += 1
+        self._rating_comments += 1
         self.save()
 
     def dislike(self):
-        self._rating -= 1
+        self._rating_comments -= 1
         self.save()
 
