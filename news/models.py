@@ -4,11 +4,34 @@ from django.contrib.auth.models import User
 
 
 class Author(models.Model):
-    _rating_autor = models.IntegerField(default = 0)
+    rating_autor = models.IntegerField(default = 0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def update_rating(self):
-        pass
+        rating_post = 0
+        rating_comment = 0
+        rating_post_comment = 0
+        post = Post.objects.filter(autor_id=self)
+        for p in post:
+            rating_post += p._rating_post
+
+        comment = Comment.objects.filter(user_id=self.user)
+        for c in comment:
+            rating_comment += c._rating_comments
+
+        post_comment = Comment.objects.filter(post_id__autor_id=self)
+        for p_c in post_comment:
+            rating_post_comment += p_c._rating_comments
+
+
+
+        print(f"Общий рейтинг постов автора {rating_post}")
+        print(f"Общий рейтинг коментариев автора {rating_comment}")
+        print(f"Общий рейтинг коментариев к постам автора {rating_post_comment}")
+
+        self.rating_autor = rating_post * 3 + rating_comment + rating_post_comment
+        self.save()
+
 
 
 class Category(models.Model):

@@ -5,27 +5,28 @@ from news.models import *
 
 
 создание пользователей:
-user1 = User.objects.create_user('Пользователь1')
-user2 = User.objects.create_user('Пользователь2')
+User.objects.create_user('Пользователь1')
+User.objects.create_user('Пользователь2')
 
 
 создание авторов
 
-author1 = Author.objects.create(user=user1)
-author2 = Author.objects.create(user=user2)
+Author.objects.create(user=user1)
+Author.objects.create(user=user2)
 
 
 
 создание категорий
-category1 = Category.objects.create(category='Спорт')
-category2 = Category.objects.create(category='IT NEWS')
-category3 = Category.objects.create(category='Политика')
-category4 = Category.objects.create(category='Погода')
+Category.objects.create(category='Спорт')
+Category.objects.create(category='IT NEWS')
+Category.objects.create(category='Политика')
+Category.objects.create(category='Погода')
+Category.objects.create(category='Экономика')
 
 
 созданиие новостей,
 
-post1 = Post.objects.create(autor_id=author1, type="NW", title_news="Заголовок 1", text_news="Новость1" )
+post1 = Post.objects.create(autor_id=author1, type="NW", title_news="Тест preview", text_news="большой текст" )
 
 Post.objects.create(autor_id=author1, type="NW", title_news="Политика-Экономика ", text_news="какая то новость" )
 Post.objects.create(autor_id=author1, type="NW", title_news="Погода", text_news="Новости погоды" )
@@ -35,23 +36,53 @@ Post.objects.create(autor_id=author1, type="AR", title_news="Статья Эко
 Post.objects.create(autor_id=author2, type="NW", title_news="Политика-IT", text_news="Что то с IT и политикой" )
 
 создание связей пост-категория
-pc1 = PostCategory.objects.create(post_id=post1, category_id=sport)
-pc2 = PostCategory.objects.create(post_id=post1, category_id=politics)
 
+PostCategory.objects.create(post_id=post1, category_id=sport)
+PostCategory.objects.create(post_id=post1, category_id=politics)
+
+PostCategory.objects.create(post_id=politics_economics, category_id=politics)
+PostCategory.objects.create(post_id=politics_economics, category_id=economics)
+PostCategory.objects.create(post_id=weather_news, category_id=weather)
+PostCategory.objects.create(post_id=it_news, category_id=it)
+PostCategory.objects.create(post_id=article_sport, category_id=sport)
+PostCategory.objects.create(post_id=article_economics, category_id=economics)
+PostCategory.objects.create(post_id=politics_it, category_id=it)
+PostCategory.objects.create(post_id=politics_it, category_id=politics)
 
 
 создание коментария
 
-comment1 = Comment.objects.create(post_id = post1, user_id = user1, text_comment = "Какой-то комтарий")
+Comment.objects.create(post_id = post1, user_id = user1, text_comment = "Какой-то комтарий")
+
+Comment.objects.create(post_id = politics_economics, user_id = user1, text_comment = "Политико-Экономический коментарий пользователя 1")
+Comment.objects.create(post_id = politics_economics, user_id = user2, text_comment = "Политико-Экономический коментарий пользователя 2")
+
+Comment.objects.create(post_id = weather_news, user_id = user1, text_comment = "Погодный коментарий пользователя 1")
+Comment.objects.create(post_id = article_sport, user_id = user2, text_comment = "Спортивный коментарий пользователя 2")
+
+Comment.objects.create(post_id = it_news, user_id = user1, text_comment = "IT коментарий пользователя 1")
+Comment.objects.create(post_id = it_news, user_id = user2, text_comment = "IT коментарий пользователя 2")
+
+
+получение новостей из БД
+
+test_preview = Post.objects.get(title_news="Тест preview")
+politics_economics = Post.objects.get(title_news="Политика-Экономика ")
+weather_news = Post.objects.get(title_news="Погода")
+it_news = Post.objects.get(title_news="Новости IT")
+article_sport = Post.objects.get(title_news="Статья Спорт")
+article_economics = Post.objects.get(title_news="Статья Экономика ")
+politics_it = Post.objects.get(title_news="Политика-IT")
+
 
 
 получение категорий
 
 sport = Category.objects.get(category='Спорт')
-it_news = Category.objects.get(category='IT NEWS')
-politics = Category.objects.get(category='Политика')
+it = Category.objects.get(category='IT NEWS')
+politics = Category.objects.get(category='Политика')author.
 weather = Category.objects.get(category='Погода')
-
+economics = Category.objects.get(category='Экономика')
 
 
 
@@ -59,8 +90,19 @@ weather = Category.objects.get(category='Погода')
 
 author1 = Author.objects.get(pk=1)
 
-фильтр новостей по категории спорт
-news = Post.objects.filter(category=sport)
+
+получение пользователей из БД
+
+user1 = User.objects.get(pk=1) 
+user2 = User.objects.get(username="Пользователь2")
+
+
+
+Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+
+Author.objects.all().order_by('-rating_autor').values('rating_autor', 'user__username')[0] 
+
+
 
 
 
