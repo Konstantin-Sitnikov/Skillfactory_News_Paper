@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from news.models import *
 
 
-
 создание пользователей:
 User.objects.create_user('Пользователь1')
 User.objects.create_user('Пользователь2')
@@ -89,12 +88,15 @@ economics = Category.objects.get(category='Экономика')
 получение авторов из БД
 
 author1 = Author.objects.get(pk=1)
+author2 = Author.objects.get(pk=2)
 
 
 получение пользователей из БД
 
 user1 = User.objects.get(pk=1) 
 user2 = User.objects.get(username="Пользователь2")
+
+
 
 
 
