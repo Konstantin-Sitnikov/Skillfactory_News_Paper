@@ -13,21 +13,20 @@ class Author(models.Model):
         rating_post_comment = 0
         post = Post.objects.filter(autor_id=self)
         for p in post:
-            rating_post += p._rating_post
+            rating_post += p.rating_post
 
         comment = Comment.objects.filter(user_id=self.user)
         for c in comment:
-            rating_comment += c._rating_comments
+            rating_comment += c.rating_comments
 
         post_comment = Comment.objects.filter(post_id__autor_id=self)
         for p_c in post_comment:
-            rating_post_comment += p_c._rating_comments
+            rating_post_comment += p_c.rating_comments
 
 
-
-        print(f"Общий рейтинг постов автора {rating_post}")
-        print(f"Общий рейтинг коментариев автора {rating_comment}")
-        print(f"Общий рейтинг коментариев к постам автора {rating_post_comment}")
+        # print(f"Общий рейтинг постов автора {rating_post}")
+        # print(f"Общий рейтинг коментариев автора {rating_comment}")
+        # print(f"Общий рейтинг коментариев к постам автора {rating_post_comment}")
 
         self.rating_autor = rating_post * 3 + rating_comment + rating_post_comment
         self.save()
@@ -52,18 +51,19 @@ class Post(models.Model):
     category = models.ManyToManyField(Category, through="PostCategory")
     title_news = models.CharField(max_length = 128)
     text_news = models.TextField()
-    _rating_post = models.IntegerField(default = 0, db_column='rating_post')
+    rating_post = models.IntegerField(default = 0,)
 
     def like(self):
-        self._rating_post += 1
+        self.rating_post += 1
         self.save()
 
     def dislike(self):
-        self._rating_post -= 1
+        self.rating_post -= 1
         self.save()
 
     def preview(self):
         return self.text_news[0:123] + "..."
+
 
 
 class PostCategory(models.Model):
@@ -76,13 +76,13 @@ class Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     text_comment = models.CharField(max_length = 255)
     date_time = models.DateTimeField(auto_now_add=True)
-    _rating_comments = models.IntegerField(default=0, db_column='rating_comments')
+    rating_comments = models.IntegerField(default=0, db_column='rating_comments')
 
     def like(self):
-        self._rating_comments += 1
+        self.rating_comments += 1
         self.save()
 
     def dislike(self):
-        self._rating_comments -= 1
+        self.rating_comments -= 1
         self.save()
 

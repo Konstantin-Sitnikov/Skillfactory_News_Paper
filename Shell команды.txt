@@ -100,9 +100,19 @@ user2 = User.objects.get(username="Пользователь2")
 
 Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
 
-Author.objects.all().order_by('-rating_autor').values('rating_autor', 'user__username')[0] 
+Author.objects.all().order_by('-rating_autor').values('rating_autor', 'user__username')[0]
+ 
+Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
 
+top_post = Post.objects.all().order_by('-rating_post')[0]  
+top_post.date_time.strftime("%Y-%m-%d %H:%M:%S")
+top_post.autor_id.user.username
+top_post.title_news
+top_post.preview()
 
+Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
 
+comments_top_post = Comment.objects.filter(post_id=top_post.pk)
 
+comments_top_post.values('user_id__username', 'date_time', 'rating_comments', 'text_comment')
 
