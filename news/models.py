@@ -89,3 +89,8 @@ class Comment(models.Model):
         self.rating_comments -= 1
         self.save()
 
+class Censorship(models.Model):
+    word = models.CharField(max_length = 255, unique=True)
+
+    def __str__(self):
+        return f'{self.word}'

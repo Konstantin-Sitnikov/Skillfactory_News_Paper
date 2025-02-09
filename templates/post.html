@@ -1,12 +1,43 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
 <!-- Название у нас будет Product -->
 {% block title %}
-Новость внутри:
+Post
 {% endblock title %}
 
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
 {% block content %}
-<h1>{{ post }}</h1>
+<h1>{{ post.title_news }}</h1>
+<style>
+    td {
+
+   border: 1px solid grey;
+
+}
+</style>
+
+            <table border="1">
+
+                <tr>
+                    <td align="left">{{ post.text_news | censor }}</td>
+                </tr>
+
+                <tr>
+                    <td align="right"> Дата публикации статьи: {{ post.date_time | date:'d M Y' }}</td>
+                </tr>
+
+                <tr>
+                    <td align="right"> Рейтинг: {{ post.rating_post }}</td>
+                </tr>
+
+
+            </table>
+
+
+
+
+
 {% endblock content %}

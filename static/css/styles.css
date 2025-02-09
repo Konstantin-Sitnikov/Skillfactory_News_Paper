@@ -331,6 +331,7 @@ tfoot,
 tr,
 td,
 th {
+  border: 5px solid black;
   border-color: inherit;
   border-style: solid;
   border-width: 0;

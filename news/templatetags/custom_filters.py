@@ -1,0 +1,37 @@
+from django import template
+
+from NewsPaper.news.models import Censorship
+
+register = template.Library()
+
+def delete_symbol_l_r(word):
+    symbols = ['!', '"', '#', '$', '%', '&', "'", '(', ')' '*',"\\", '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?',
+               '@', '[', ']', '^', '_', '`', '{', '|', '}']
+    for symbol in symbols:
+       word = word.rstrip(symbol).lstrip(symbol)
+    return word
+
+def stripping(text):
+    word = ''
+    for i in text:
+        if i.isalpha():
+            word += i
+    return word.lower()
+
+
+@register.filter()
+def censor(text):
+    list_censor = ["рамки", "форм", "сфера", "опыт"]
+
+    for word in text.split():
+        format_word = stripping(word)
+        if format_word in list_censor:
+            cencore_word = format_word[0] + "*" * (len(word) - 1)
+            text = text.replace(delete_symbol_l_r(word), cencore_word)
+
+    return text
+
+
+def set_list_censor():
+    return [str(i) for i in Censorship.objects.all()]
+
