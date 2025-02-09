@@ -1,6 +1,6 @@
 from django import template
 
-from NewsPaper.news.models import Censorship
+from news.models import Censorship
 
 register = template.Library()
 
@@ -21,7 +21,7 @@ def stripping(text):
 
 @register.filter()
 def censor(text):
-    list_censor = ["рамки", "форм", "сфера", "опыт"]
+    list_censor = [str(i) for i in Censorship.objects.all()]
 
     for word in text.split():
         format_word = stripping(word)

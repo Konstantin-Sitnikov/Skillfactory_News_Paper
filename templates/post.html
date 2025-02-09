@@ -10,7 +10,7 @@ Post
 
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
 {% block content %}
-<h1>{{ post.title_news }}</h1>
+<h1>{{ post.title_news | censor }}</h1>
 <style>
     td {
 

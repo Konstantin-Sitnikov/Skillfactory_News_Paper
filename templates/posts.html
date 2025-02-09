@@ -1,6 +1,8 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
 <!-- Название у нас будет products -->
 {% block title %}
 Post
@@ -28,9 +30,9 @@ Post
 
                 {% for post in posts%}
                 <tr>
-                    <td>{{ post.title_news }}</td>
+                    <td><a href="http://127.0.0.1:8000/news/{{ post.pk }}">{{ post.title_news | censor }}</a></td>
                     <td>{{ post.date_time | date:'d M Y' }}</td>
-                    <td>{{ post.text_news | truncatewords:20 }}</td>
+                    <td>{{ post.text_news | truncatewords:20 | censor }}</td>
                     <td>{{ post.rating_post }}</td>
                 </tr>
                 {% endfor %}
