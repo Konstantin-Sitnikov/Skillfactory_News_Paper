@@ -16,6 +16,8 @@ class PostList(ListView):
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'posts'
 
+    paginate_by = 5
+
 
 class PostDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
