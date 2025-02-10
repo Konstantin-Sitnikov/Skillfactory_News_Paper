@@ -23,11 +23,6 @@ class Author(models.Model):
         for p_c in post_comment:
             rating_post_comment += p_c.rating_comments
 
-
-        # print(f"Общий рейтинг постов автора {rating_post}")
-        # print(f"Общий рейтинг коментариев автора {rating_comment}")
-        # print(f"Общий рейтинг коментариев к постам автора {rating_post_comment}")
-
         self.rating_autor = rating_post * 3 + rating_comment + rating_post_comment
         self.save()
 
