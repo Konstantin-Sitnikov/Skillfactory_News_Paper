@@ -18,6 +18,22 @@ class PostList(ListView):
     context_object_name = 'posts'
     paginate_by = 10
 
+
+
+
+class PostSearch(ListView):
+    # Указываем модель, объекты которой мы будем выводить
+    model = Post
+    # Поле, которое будет использоваться для сортировки объектов
+    ordering = '-date_time'
+    # Указываем имя шаблона, в котором будут все инструкции о том,
+    # как именно пользователю должны быть показаны наши объекты
+    template_name = 'post_search.html'
+    # Это имя списка, в котором будут лежать все объекты.
+    # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
+    context_object_name = 'post_search'
+    paginate_by = 10
+
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = NewsFilter(self.request.GET, queryset)
@@ -28,6 +44,11 @@ class PostList(ListView):
         # Добавляем в контекст объект фильтрации.
         context['filterset'] = self.filterset
         return context
+
+
+
+
+
 
 
 class PostDetail(DetailView):

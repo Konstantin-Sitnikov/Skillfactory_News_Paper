@@ -13,15 +13,13 @@ Post
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
     <h1>Новости</h1>
+    <h3> Количество новостей: {{ post_search | length}} </h3>
 
+        <form action="" method="get">
+            {{ filterset.form.as_p }}
 
-        <form action="/news/search/" target="_blank">
-
-            <button>Поиск новостей</button>
+            <input type="submit" value="Найти" />
         </form>
-
-
-
 
         <style>
             td {
@@ -29,7 +27,7 @@ Post
            border: 1px solid grey;
            }
         </style>
-        {% if posts %}
+        {% if post_search %}
             <table border="3" cellpadding="4" cellspacing="1">
 
                 <tr>
@@ -40,11 +38,11 @@ Post
                     <td align="left">Рейтинг статьи</td>
                 </tr>
 
-                {% for post in posts%}
+                {% for post in post_search%}
                 <tr>
                     <td><a href="http://127.0.0.1:8000/news/{{ post.pk }}">{{ post.title_news | censor }}</a></td>
                     <td>{{ post.autor_id.user }}</td>
-                    <td>{{ post.date_time | date:'d M Y' }}</td>
+                    <td>{{ post.date_time }}</td>
                     <td>{{ post.text_news | truncatewords:20 | censor }}</td>
                     <td>{{ post.rating_post }}</td>
                 </tr>
@@ -52,7 +50,7 @@ Post
             </table>
 
         {% else %}
-        <h2>Новостей нет!</h2>
+        <h2>По вашему запросу ничего не найдено!</h2>
         {% endif%}
 {# Добавляем пагинацию на страницу #}
 

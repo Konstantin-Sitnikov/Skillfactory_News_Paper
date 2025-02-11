@@ -1,15 +1,22 @@
+import django_filters
 from django_filters import FilterSet
+from django import forms
 from .models import Post
 
-class NewsFilter(FilterSet):
-   class Meta:
-       model = Post
 
-       fields = {
-           # поиск по автору
-           'autor_id__user': ['in'],
-           # поиск но новости
-           'title_news': ['icontains'],
-           #поиск по дате
-           'date_time': ['year__gt'],
-       }
+
+class NewsFilter(FilterSet):
+    autor_id__user__username = django_filters.CharFilter(lookup_expr='icontains')
+    title_news = django_filters.CharFilter(lookup_expr='icontains')
+    date_time = django_filters.DateFilter(field_name="date_time", lookup_expr='gt', label="Date", widget=forms.DateInput(attrs={"type": 'date'}))
+
+    class Meta:
+        model = Post
+
+        fields = [ "autor_id__user__username",
+                   "title_news",
+                   "date_time"
+
+
+       ]
+
