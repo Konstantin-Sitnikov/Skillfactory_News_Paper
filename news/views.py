@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import NewsForm, ArticleForm
 from .models import Post
@@ -49,10 +49,6 @@ class PostSearch(ListView):
 
 
 
-
-
-
-
 class PostDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Post
@@ -81,3 +77,15 @@ class ArticleCreate(CreateView):
         news = form.save(commit=False)
         news.type = "AR"
         return super().form_valid(form)
+
+
+class NewsUpdate(UpdateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'create_news.html'
+
+
+class ArticleUpdate(UpdateView):
+    form_class = ArticleForm
+    model = Post
+    template_name = 'create_article.html'

@@ -34,6 +34,7 @@ Post
                     <td align="left">Заголовок</td>
                     <td align="left">Автор</td>
                     <td align="left">Дата</td>
+                    <td align="left">Статья/новость</td>
                     <td align="left">Статья</td>
                     <td align="left">Рейтинг статьи</td>
                 </tr>
@@ -42,7 +43,8 @@ Post
                 <tr>
                     <td><a href="http://127.0.0.1:8000/news/{{ post.pk }}">{{ post.title_news | censor }}</a></td>
                     <td>{{ post.autor_id.user }}</td>
-                    <td>{{ post.date_time }}</td>
+                    <td>{{ post.date_time | date:'d M Y' }}</td>
+                    <td>{{ post.type }}</td>
                     <td>{{ post.text_news | truncatewords:20 | censor }}</td>
                     <td>{{ post.rating_post }}</td>
                 </tr>
