@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+
+from .forms import NewsForm, ArticleForm
 from .models import Post
 from .filters import NewsFilter
 
@@ -58,3 +60,24 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'post'
+
+
+class NewsCreate(CreateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'create_news.html'
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.type = "NW"
+        return super().form_valid(form)
+
+
+class ArticleCreate(CreateView):
+    form_class = ArticleForm
+    model = Post
+    template_name = 'create_article.html'
+
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.type = "AR"
+        return super().form_valid(form)

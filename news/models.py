@@ -1,11 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.urls import reverse
 
 
 class Author(models.Model):
     rating_autor = models.IntegerField(default = 0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username.title()
 
     def update_rating(self):
         rating_post = 0
@@ -31,6 +34,9 @@ class Author(models.Model):
 class Category(models.Model):
     category = models.CharField(max_length=64, unique=True)
 
+    def __str__(self):
+        return self.category.title()
+
 
 class Post(models.Model):
     news = "NW"
@@ -46,7 +52,7 @@ class Post(models.Model):
     category = models.ManyToManyField(Category, through="PostCategory")
     title_news = models.CharField(max_length = 128)
     text_news = models.TextField()
-    rating_post = models.IntegerField(default = 0,)
+    rating_post = models.IntegerField(default = 0)
 
     def like(self):
         self.rating_post += 1
@@ -61,6 +67,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title_news.title()}'
+
+    def get_absolute_url(self):
+        return reverse('news_detail', args=[str(self.id)])
 
 
 
