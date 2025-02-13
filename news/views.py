@@ -1,38 +1,28 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.http import HttpResponse
+
 
 from .forms import NewsForm, ArticleForm
 from .models import Post
 from .filters import NewsFilter
 
+
 # Create your views here.
 
 class PostList(ListView):
-    # Указываем модель, объекты которой мы будем выводить
     model = Post
-    # Поле, которое будет использоваться для сортировки объектов
     ordering = '-date_time'
-    # Указываем имя шаблона, в котором будут все инструкции о том,
-    # как именно пользователю должны быть показаны наши объекты
     template_name = 'posts.html'
-    # Это имя списка, в котором будут лежать все объекты.
-    # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'posts'
     paginate_by = 10
 
 
-
-
 class PostSearch(ListView):
-    # Указываем модель, объекты которой мы будем выводить
     model = Post
-    # Поле, которое будет использоваться для сортировки объектов
     ordering = '-date_time'
-    # Указываем имя шаблона, в котором будут все инструкции о том,
-    # как именно пользователю должны быть показаны наши объекты
     template_name = 'post_search.html'
-    # Это имя списка, в котором будут лежать все объекты.
-    # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'post_search'
     paginate_by = 10
 
@@ -48,13 +38,9 @@ class PostSearch(ListView):
         return context
 
 
-
 class PostDetail(DetailView):
-    # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Post
-    # Используем другой шаблон — product.html
     template_name = 'post.html'
-    # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'post'
 
 
@@ -84,8 +70,43 @@ class NewsUpdate(UpdateView):
     model = Post
     template_name = 'create_news.html'
 
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        if news.type == "NW":
+            return  super().form_valid(form)
+        else:
+            return redirect("newsediterror")
+
+
 
 class ArticleUpdate(UpdateView):
     form_class = ArticleForm
     model = Post
     template_name = 'create_article.html'
+
+    def form_valid(self, form):
+        article = form.save(commit=False)
+        if article.type == "AR":
+            return super().form_valid(form)
+        else:
+            return redirect("articleediterror")
+
+
+
+class NewsDelete(DeleteView):
+    model = Post
+    template_name = 'news_delete.html'
+    success_url = reverse_lazy('news_list')
+
+
+class ArticleDelete(DeleteView):
+    model = Post
+    template_name = 'article_delete.html'
+    success_url = reverse_lazy('news_list')
+
+
+def news_update_delete_invalid(request):
+    return HttpResponse("Ошибочка! Вы хотите изменить новость а выбрали сатью!")
+
+def article_update_delete_invalid(request):
+    return HttpResponse("Ошибочка! Вы хотите изменить Статью а выбрали Новость!")

@@ -35,6 +35,11 @@ def censor(text):
 def set_list_censor():
     return [str(i) for i in Censorship.objects.all()]
 
+@register.filter()
+def test(text):
+    if text == "NW":
+        return True
+    return False
 
 
 # @register.simple_tag(takes_context=True)
