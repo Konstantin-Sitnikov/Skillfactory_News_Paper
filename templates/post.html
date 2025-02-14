@@ -37,4 +37,31 @@ Post
             </table>
 
 
+{% if update_news %}
+
+        <form action="/publication/news/{{ post.pk }}/edit/" target="_blank">
+
+            <button>Изменить новость</button>
+        </form>
+
+{% endif %}
+
+
+{% if update_article %}
+
+        <form action="/publication/article/{{ post.pk }}/edit/" target="_blank">
+
+            <button>Изменить статью</button>
+        </form>
+
+{% endif %}
+
+
+
+        <form action="/publication/" target="_blank">
+
+            <button>На главную</button>
+        </form>
+
+
 {% endblock content %}

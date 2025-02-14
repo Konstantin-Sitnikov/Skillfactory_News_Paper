@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 
 
-from .forms import NewsForm, ArticleForm
+from .forms import Publication
 from .models import Post
 from .filters import NewsFilter
 
@@ -43,30 +43,62 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        publication = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['update_news'] = (publication.type == "NW")
+        context['update_article'] = (publication.type == "AR")
+        return context
 
-class NewsCreate(CreateView):
-    form_class = NewsForm
+
+
+
+class PublicationCreate(CreateView):
+    form_class = Publication
+    model = Post
+    template_name = 'create_publication.html'
+
+    def form_valid(self, form):
+        publication = form.save(commit=False)
+        print(self.request.path)
+        if self.request.path == "/publication/news/create/":
+            publication.type = "NW"
+            return super().form_valid(form)
+        if self.request.path == "/publication/article/create/":
+            publication.type = "AR"
+            return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['create_news'] = (self.request.path == "/publication/news/create/")
+        context['create_article'] = (self.request.path == "/publication/article/create/")
+        return context
+
+
+
+class PublicationUpdate(UpdateView):
+    form_class = Publication
     model = Post
     template_name = 'create_news.html'
-    def form_valid(self, form):
-        news = form.save(commit=False)
-        news.type = "NW"
-        return super().form_valid(form)
-
-
-class ArticleCreate(CreateView):
-    form_class = ArticleForm
-    model = Post
-    template_name = 'create_article.html'
 
     def form_valid(self, form):
         news = form.save(commit=False)
-        news.type = "AR"
-        return super().form_valid(form)
+        if news.type == "NW":
+            return  super().form_valid(form)
+        else:
+            return redirect("newsediterror")
+
+
+
+
+
+
+
+
 
 
 class NewsUpdate(UpdateView):
-    form_class = NewsForm
+    form_class = Publication
     model = Post
     template_name = 'create_news.html'
 
@@ -80,7 +112,7 @@ class NewsUpdate(UpdateView):
 
 
 class ArticleUpdate(UpdateView):
-    form_class = ArticleForm
+    form_class = Publication
     model = Post
     template_name = 'create_article.html'
 

@@ -65,9 +65,6 @@ class Post(models.Model):
     def preview(self):
         return self.text_news[0:123] + "..."
 
-    def __str__(self):
-        return f'{self.title_news.title()}'
-
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
 
