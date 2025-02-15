@@ -12,31 +12,71 @@ Post
 
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
+
+<style>
+
+.shadowbox {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #333;
+  box-shadow: 8px 8px 5px #444;
+  padding: 8px 12px;
+  background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+}
+
+td {
+
+    border: 2px black
+
+}
+
+</style>
+
+
     <h1>Новости</h1>
 
 
-        <form action="/publication/search/" target="_blank">
+<div class="shadowbox">
+            <p></p>
 
-            <button>Поиск новостей</button>
-        </form>
+                <table align="center">
 
-        <form action="/publication/news/create/" target="_blank">
+                    <tr>
+                        <td colspan="2">
+                            <form action="/publication/search/" target="_blank">
 
-            <button>Добавить новость</button>
-        </form>
+                                <button>Поиск новостей</button>
+                            </form>
+                        </td>
+                    </tr>
 
-        <form action="/publication/article/create/" target="_blank">
+                    <tr>
 
-            <button>Добавить статью</button>
-        </form>
+                        <td align="center">
+                            <form action="/publication/news/create/" target="_blank">
+
+                                <button>Добавить новость</button>
+                            </form>
+                        </td>
 
 
-        <style>
-            td {
 
-           border: 1px solid grey;
-           }
-        </style>
+                        <td align="center">
+
+                            <form action="/publication/article/create/" target="_blank">
+
+                                <button>Добавить статью</button>
+                            </form>
+                        </td>
+
+                    </tr>
+
+
+                </table>
+            <p></p>
+        </div>
+
+
         {% if posts %}
             <table border="3" cellpadding="4" cellspacing="1">
 

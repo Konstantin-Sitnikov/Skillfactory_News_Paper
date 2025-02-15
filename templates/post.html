@@ -11,10 +11,11 @@ Post
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
 {% block content %}
 <h1>{{ post.title_news | censor }}</h1>
+
 <style>
 
 .shadowbox {
-  width: 70em;
+  width: 100%;
   margin: 0 auto;
   border: 1px solid #333;
   box-shadow: 8px 8px 5px #444;
@@ -23,8 +24,11 @@ Post
 }
 
 
-
 </style>
+
+
+
+
         <div class="shadowbox">
             <p></p>
                 <table align="center">
@@ -86,6 +90,47 @@ Post
 
 
 
+        <div class="shadowbox">
+            <p></p>
+
+                <table align="center">
+                    <tr></tr>
+
+
+
+
+                    <tr>
+                        <td align="center">
+
+                                    <form >
+                                        {{ post.like }}
+                                        <button>Лайк</button>
+                                    </form>
+
+
+                                <form >
+                                        {{ post.dislike }}
+                                    <button>Дизлайк</button>
+                                </form>
+
+                        </td>
+
+                    </tr>
+                </table>
+            <p></p>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div>
     <p>
@@ -93,8 +138,6 @@ Post
             <table border="3" cellpadding="4" cellspacing="1">
 
                 <tr>
-
-
                     <td align="left">Текст комментария</td>
                     <td align="left">Дата</td>
                     <td align="left">Автор</td>
@@ -115,11 +158,6 @@ Post
         {% else %}
         <h2>Комментариев нет!</h2>
         {% endif%}
-
-
-
-
-
 
     </p>
 </div>

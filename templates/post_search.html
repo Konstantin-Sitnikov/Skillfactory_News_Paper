@@ -41,7 +41,7 @@ Post
 
                 {% for post in post_search%}
                 <tr>
-                    <td><a href="http://127.0.0.1:8000/news/{{ post.pk }}">{{ post.title_news | censor }}</a></td>
+                    <td><a href="http://127.0.0.1:8000/publication/{{ post.pk }}">{{ post.title_news | censor }}</a></td>
                     <td>{{ post.autor_id.user }}</td>
                     <td>{{ post.date_time | date:'d M Y' }}</td>
                     <td>{{ post.type }}</td>
