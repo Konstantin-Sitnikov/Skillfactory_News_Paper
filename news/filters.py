@@ -17,7 +17,5 @@ class NewsFilter(FilterSet):
         fields = [ "autor_id__user__username",
                    "title_news",
                    "date_time"
-
-
        ]
 

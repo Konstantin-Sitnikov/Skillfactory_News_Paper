@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 
 from .forms import Publication
-from .models import Post
+from .models import Post, Comment
 from .filters import NewsFilter
 
 
@@ -48,9 +48,8 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['update_news'] = (publication.type == "NW")
         context['update_article'] = (publication.type == "AR")
+        context['comments'] = Comment.objects.filter(post_id=publication.pk)
         return context
-
-
 
 
 class PublicationCreate(CreateView):
@@ -60,7 +59,6 @@ class PublicationCreate(CreateView):
 
     def form_valid(self, form):
         publication = form.save(commit=False)
-        print(self.request.path)
         if self.request.path == "/publication/news/create/":
             publication.type = "NW"
             return super().form_valid(form)
@@ -79,50 +77,16 @@ class PublicationCreate(CreateView):
 class PublicationUpdate(UpdateView):
     form_class = Publication
     model = Post
-    template_name = 'create_news.html'
+    template_name = 'create_publication.html'
 
     def form_valid(self, form):
-        news = form.save(commit=False)
-        if news.type == "NW":
+        publication = form.save(commit=False)
+        if publication.type == "NW" and self.request.path == f"/publication/news/{publication.pk}/edit/":
+            return  super().form_valid(form)
+        elif publication.type == "AR" and self.request.path == f"/publication/article/{publication.pk}/edit/":
             return  super().form_valid(form)
         else:
             return redirect("newsediterror")
-
-
-
-
-
-
-
-
-
-
-class NewsUpdate(UpdateView):
-    form_class = Publication
-    model = Post
-    template_name = 'create_news.html'
-
-    def form_valid(self, form):
-        news = form.save(commit=False)
-        if news.type == "NW":
-            return  super().form_valid(form)
-        else:
-            return redirect("newsediterror")
-
-
-
-class ArticleUpdate(UpdateView):
-    form_class = Publication
-    model = Post
-    template_name = 'create_article.html'
-
-    def form_valid(self, form):
-        article = form.save(commit=False)
-        if article.type == "AR":
-            return super().form_valid(form)
-        else:
-            return redirect("articleediterror")
-
 
 
 class NewsDelete(DeleteView):
@@ -142,3 +106,5 @@ def news_update_delete_invalid(request):
 
 def article_update_delete_invalid(request):
     return HttpResponse("Ошибочка! Вы хотите изменить Статью а выбрали Новость!")
+
+
