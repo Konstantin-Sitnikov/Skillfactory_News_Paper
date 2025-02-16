@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from .forms import Publication
@@ -74,7 +75,7 @@ class PublicationCreate(CreateView):
 
 
 
-class PublicationUpdate(UpdateView):
+class PublicationUpdate(LoginRequiredMixin, UpdateView):
     form_class = Publication
     model = Post
     template_name = 'create_publication.html'
@@ -86,7 +87,7 @@ class PublicationUpdate(UpdateView):
         elif publication.type == "AR" and self.request.path == f"/publication/article/{publication.pk}/edit/":
             return  super().form_valid(form)
         else:
-            return redirect("newsediterror")
+            return redirect("edit_delete_error")
 
 
 class NewsDelete(DeleteView):
@@ -101,10 +102,19 @@ class ArticleDelete(DeleteView):
     success_url = reverse_lazy('news_list')
 
 
-def news_update_delete_invalid(request):
-    return HttpResponse("Ошибочка! Вы хотите изменить новость а выбрали сатью!")
+def edit_delete_invalid(request):
+    return HttpResponse("Ошибочка! Неверный путь!")
 
-def article_update_delete_invalid(request):
-    return HttpResponse("Ошибочка! Вы хотите изменить Статью а выбрали Новость!")
 
+def like_dislike(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == "POST":
+        if request.POST.get("like") == "like":
+            post.like()
+            post.save()
+            return redirect("news_detail", pk)
+        elif request.POST.get("dislike") == "dislike":
+            post.dislike()
+            post.save()
+            return redirect("news_detail", pk)
 

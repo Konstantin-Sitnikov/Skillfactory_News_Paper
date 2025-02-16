@@ -102,16 +102,18 @@ Post
                     <tr>
                         <td align="center">
 
-                                    <form >
-                                        {{ post.like }}
-                                        <button>Лайк</button>
+                                    <form action="{% url 'like_dislike' post.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="like" value="like">
+                                        <input type="submit" value="like">
                                     </form>
 
 
-                                <form >
-                                        {{ post.dislike }}
-                                    <button>Дизлайк</button>
-                                </form>
+                                    <form action="{% url 'like_dislike' post.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="dislike" value="dislike">
+                                        <input type="submit" value="dislike">
+                                    </form>
 
                         </td>
 
