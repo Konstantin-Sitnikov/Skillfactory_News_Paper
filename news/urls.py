@@ -3,7 +3,7 @@ from .views import (PostList, PostDetail, PostSearch,PublicationCreate, Publicat
                     NewsDelete,
                     ArticleDelete,
                     edit_delete_invalid,
-                    like_dislike
+                    like_dislike,
                     )
 
 
@@ -24,7 +24,9 @@ urlpatterns = [
     path('article/create/', PublicationCreate.as_view(), name="article_create"),
     path('article/<int:pk>/edit/', PublicationUpdate.as_view(), name="article_edit"),
     path('article/<int:pk>/delete/', ArticleDelete.as_view(), name="article_delete"),
-    path('<int:pk>/like_dislike/', like_dislike, name="like_dislike")
+    path('<int:pk>/like_dislike/', like_dislike, name="like_dislike"),
+
+
 
 
 

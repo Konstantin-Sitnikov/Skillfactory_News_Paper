@@ -3,6 +3,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
 
 
 from .forms import Publication
@@ -53,7 +55,7 @@ class PostDetail(DetailView):
         return context
 
 
-class PublicationCreate(CreateView):
+class PublicationCreate(LoginRequiredMixin, CreateView):
     form_class = Publication
     model = Post
     template_name = 'create_publication.html'
@@ -61,9 +63,11 @@ class PublicationCreate(CreateView):
     def form_valid(self, form):
         publication = form.save(commit=False)
         if self.request.path == "/publication/news/create/":
+            publication.autor_id = self.request.user
             publication.type = "NW"
             return super().form_valid(form)
         if self.request.path == "/publication/article/create/":
+            publication.autor_id = self.request.user
             publication.type = "AR"
             return super().form_valid(form)
 
@@ -88,6 +92,7 @@ class PublicationUpdate(LoginRequiredMixin, UpdateView):
             return  super().form_valid(form)
         else:
             return redirect("edit_delete_error")
+
 
 
 class NewsDelete(DeleteView):
@@ -117,4 +122,8 @@ def like_dislike(request, pk):
             post.dislike()
             post.save()
             return redirect("news_detail", pk)
+
+
+
+
 

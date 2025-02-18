@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     'news',
+    "protect",
 
     'allauth',
     'allauth.account',
@@ -70,11 +71,9 @@ SOCIALACCOUNT_PROVIDERS = {
 
 
 
-
-
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/publication/'
-LOGOUT_REDIRECT_URL = '/publication/'
+LOGIN_REDIRECT_URL = '/protect/login/'
+LOGOUT_REDIRECT_URL = '/protect/logout/'
 
 
 SITE_ID = 1
@@ -130,6 +129,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 
 
 
