@@ -45,7 +45,6 @@ class Post(models.Model):
     POSITIONS = [(news, "Новость"),
                  (article, "Статья")]
 
-
     autor_id = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length = 2, choices=POSITIONS, default=news)
     date_time = models.DateTimeField(auto_now_add=True)

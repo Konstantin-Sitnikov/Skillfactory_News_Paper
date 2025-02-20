@@ -10,9 +10,7 @@ class Publication(forms.ModelForm):
         fields = ["category", "title_news", "text_news"]
 
 
-
 class BasicSignupForm(SignupForm):
-
     def save(self, request):
         user = super(BasicSignupForm, self).save(request)
         basic_group = Group.objects.get(name='common')

@@ -64,7 +64,9 @@ Post
                                     </form>
 
                             {% endif %}
+                        </td>
 
+                        <td align="center">
 
                             {% if update_article %}
 
@@ -74,6 +76,35 @@ Post
                                 </form>
 
                             {% endif %}
+
+                        </td>
+
+
+
+                        <td align="center">
+
+                            {% if update_news %}
+
+                                    <form action="/publication/news/{{ post.pk }}/delete/" target="_blank">
+
+                                        <button>Удалить новость</button>
+                                    </form>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td align="center">
+                            {% if update_article %}
+
+                                <form action="/publication/article/{{ post.pk }}/delete/" target="_blank">
+
+                                    <button>Удалить статью</button>
+                                </form>
+
+                            {% endif %}
+
                         </td>
 
                         <td align="center">

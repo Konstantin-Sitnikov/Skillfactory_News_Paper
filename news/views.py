@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 
 
 from .forms import Publication
-from .models import Post, Comment
+from .models import Post, Comment, Author
 from .filters import NewsFilter
 
 
@@ -20,7 +20,6 @@ class PostList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 10
-
 
 class PostSearch(ListView):
     model = Post
@@ -40,7 +39,6 @@ class PostSearch(ListView):
         context['filterset'] = self.filterset
         return context
 
-
 class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
@@ -55,19 +53,24 @@ class PostDetail(DetailView):
         return context
 
 
-class PublicationCreate(LoginRequiredMixin, CreateView):
+class PublicationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post', )
     form_class = Publication
     model = Post
     template_name = 'create_publication.html'
 
     def form_valid(self, form):
+
         publication = form.save(commit=False)
+        author = Author.objects.get(user=self.request.user)
         if self.request.path == "/publication/news/create/":
-            publication.autor_id = self.request.user
+
+            publication.autor_id = author
             publication.type = "NW"
+
             return super().form_valid(form)
         if self.request.path == "/publication/article/create/":
-            publication.autor_id = self.request.user
+            publication.autor_id = author
             publication.type = "AR"
             return super().form_valid(form)
 
@@ -79,7 +82,8 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
 
 
 
-class PublicationUpdate(LoginRequiredMixin, UpdateView):
+class PublicationUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = Publication
     model = Post
     template_name = 'create_publication.html'
@@ -95,15 +99,10 @@ class PublicationUpdate(LoginRequiredMixin, UpdateView):
 
 
 
-class NewsDelete(DeleteView):
+class PublicationDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post',)
     model = Post
-    template_name = 'news_delete.html'
-    success_url = reverse_lazy('news_list')
-
-
-class ArticleDelete(DeleteView):
-    model = Post
-    template_name = 'article_delete.html'
+    template_name = 'publication_delete.html'
     success_url = reverse_lazy('news_list')
 
 

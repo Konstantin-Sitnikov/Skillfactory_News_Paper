@@ -1,11 +1,22 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h2>Страница авторизованного пользователя {{request.user.username}}</h2>
+<table border="3" width="100%">
+        <tr>
+                <td align="left" width="80%"><h3>Страница авторизованного пользователя {{request.user.username}}</h3></td>
+
+                <td align="center" width="20%"><button> <a href="/accounts/logout/">Выйти</a> </button></td>
+
+        </tr>
+</table>
+
+
 <div> Здесь может содержаться персональная информация для каждого пользователя </div>
 
 {% if is_not_authors %}
 <button> <a href="/protect/upgrade/">Хочу стать автором!</a> </button>
+
+
 
 {% else%}
 <div>
@@ -13,10 +24,21 @@
 
 </div>
 
-
 {% endif %}
 
-<button> <a href="/accounts/logout/">Выйти</a> </button>
+
+
+
+
+
+
+
+<form action="/publication/" target="_blank">
+
+        <button>На главную</button>
+</form>
+
+
 {% endblock %}
 
 
