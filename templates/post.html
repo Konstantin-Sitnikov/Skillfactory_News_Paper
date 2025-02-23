@@ -25,91 +25,54 @@ Post
 
 
 </style>
-
-
-
-
         <div class="shadowbox">
             <p></p>
                 <table align="center">
-
-                    <tr>
-                        <td align="left">{{ post.text_news | censor }}</td>
-                    </tr>
-
-                    <tr>
-                        <td align="right"> Дата публикации статьи: {{ post.date_time | date:'d M Y' }}</td>
-                    </tr>
-
-                    <tr>
-                        <td align="right"> Рейтинг: {{ post.rating_post }}</td>
-                    </tr>
-
+                    <tr><td align="left">{{ post.text_news | censor }}</td></tr>
+                    <tr><td align="right"> Дата публикации статьи: {{ post.date_time | date:'d M Y' }}</td></tr>
+                    <tr><td align="right"> Рейтинг: {{ post.rating_post }}</td></tr>
                 </table>
             <p></p>
         </div>
 
         <div class="shadowbox">
             <p></p>
-
                 <table align="center">
                     <tr>
                         <td align="center">
-
                             {% if update_news %}
-
-                                    <form action="/publication/news/{{ post.pk }}/edit/" target="_blank">
-
+                                    <form action="{% url 'news_edit' post.pk %}">
                                         <button>Изменить новость</button>
                                     </form>
-
                             {% endif %}
                         </td>
 
                         <td align="center">
-
                             {% if update_article %}
-
-                                <form action="/publication/article/{{ post.pk }}/edit/" target="_blank">
-
+                                <form action="{% url 'article_edit' post.pk %}">
                                     <button>Изменить статью</button>
                                 </form>
-
                             {% endif %}
-
                         </td>
-
-
 
                         <td align="center">
-
                             {% if update_news %}
-
-                                    <form action="/publication/news/{{ post.pk }}/delete/" target="_blank">
-
+                                    <form action="{% url 'news_delete' post.pk %}">
                                         <button>Удалить новость</button>
                                     </form>
-
                             {% endif %}
-
                         </td>
-
 
                         <td align="center">
                             {% if update_article %}
-
-                                <form action="/publication/article/{{ post.pk }}/delete/" target="_blank">
-
+                                <form action="{% url 'article_delete' post.pk %}">
                                     <button>Удалить статью</button>
                                 </form>
-
                             {% endif %}
-
                         </td>
 
                         <td align="center">
-                            <form action="/publication/" target="_blank">
-
+                            <form action="{% url 'news_list' %}">
                                 <button>На главную</button>
                             </form>
                         </td>
@@ -118,34 +81,23 @@ Post
             <p></p>
         </div>
 
-
-
-
         <div class="shadowbox">
             <p></p>
-
                 <table align="center">
-                    <tr></tr>
-
-
-
-
                     <tr>
                         <td align="center">
-
-                                    <form action="{% url 'like_dislike' post.pk %}" method="post">
+                            <form action="{% url 'like_dislike' post.pk %}" method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="like" value="like">
-                                        <input type="submit" value="like">
-                                    </form>
+                                <input type="hidden" name="like" value="like">
+                                <input type="submit" value="like">
+                            </form>
 
 
-                                    <form action="{% url 'like_dislike' post.pk %}" method="post">
+                            <form action="{% url 'like_dislike' post.pk %}" method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="dislike" value="dislike">
-                                        <input type="submit" value="dislike">
-                                    </form>
-
+                                <input type="hidden" name="dislike" value="dislike">
+                                <input type="submit" value="dislike">
+                            </form>
                         </td>
 
                     </tr>
@@ -155,21 +107,10 @@ Post
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div>
     <p>
         {% if comments %}
             <table border="3" cellpadding="4" cellspacing="1">
-
                 <tr>
                     <td align="left">Текст комментария</td>
                     <td align="left">Дата</td>

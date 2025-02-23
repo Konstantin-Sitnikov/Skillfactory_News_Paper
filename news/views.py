@@ -3,8 +3,6 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import Group
-from django.contrib.auth.decorators import login_required
 
 
 from .forms import Publication
@@ -12,7 +10,6 @@ from .models import Post, Comment, Author
 from .filters import NewsFilter
 
 
-# Create your views here.
 
 class PostList(ListView):
     model = Post
@@ -63,21 +60,21 @@ class PublicationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
 
         publication = form.save(commit=False)
         author = Author.objects.get(user=self.request.user)
-        if self.request.path == "/publication/news/create/":
+        if self.request.path == "/news/create/":
 
             publication.autor_id = author
             publication.type = "NW"
 
             return super().form_valid(form)
-        if self.request.path == "/publication/article/create/":
+        if self.request.path == "/article/create/":
             publication.autor_id = author
             publication.type = "AR"
             return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['create_news'] = (self.request.path == "/publication/news/create/")
-        context['create_article'] = (self.request.path == "/publication/article/create/")
+        context['create_news'] = (self.request.path == "/news/create/")
+        context['create_article'] = (self.request.path == "/article/create/")
         return context
 
 
@@ -90,9 +87,9 @@ class PublicationUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     def form_valid(self, form):
         publication = form.save(commit=False)
-        if publication.type == "NW" and self.request.path == f"/publication/news/{publication.pk}/edit/":
+        if publication.type == "NW" and self.request.path == f"/news/{publication.pk}/edit/":
             return  super().form_valid(form)
-        elif publication.type == "AR" and self.request.path == f"/publication/article/{publication.pk}/edit/":
+        elif publication.type == "AR" and self.request.path == f"/article/{publication.pk}/edit/":
             return  super().form_valid(form)
         else:
             return redirect("edit_delete_error")

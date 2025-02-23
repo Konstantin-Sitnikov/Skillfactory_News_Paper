@@ -47,6 +47,8 @@ INSTALLED_APPS = [
 
     'news',
     "protect",
+    "sign",
+
 
     'allauth',
     'allauth.account',
@@ -55,6 +57,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
 ]
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
@@ -66,7 +69,6 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
 
 
 
@@ -130,7 +132,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
+ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'}
 
 
 

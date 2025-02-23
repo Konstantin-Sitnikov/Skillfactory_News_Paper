@@ -3,9 +3,18 @@
 {% block content %}
 <table border="3" width="100%">
         <tr>
-                <td align="left" width="80%"><h3>Страница авторизованного пользователя {{request.user.username}}</h3></td>
+                <td align="left" width="60%"><h3>Страница авторизованного пользователя {{request.user.username}}</h3></td>
 
                 <td align="center" width="20%"><button> <a href="/accounts/logout/">Выйти</a> </button></td>
+
+                <td align="center" width="20%">
+                        <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit">Sign/logout</button>
+                        </form>
+                </td>
+
+
 
         </tr>
 </table>
@@ -25,10 +34,6 @@
 </div>
 
 {% endif %}
-
-
-
-
 
 
 
