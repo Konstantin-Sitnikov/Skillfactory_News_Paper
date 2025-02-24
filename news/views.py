@@ -3,10 +3,11 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
 from .forms import Publication
-from .models import Post, Comment, Author
+from .models import Post, Comment, Author, PostCategory
 from .filters import NewsFilter
 
 
@@ -47,6 +48,9 @@ class PostDetail(DetailView):
         context['update_news'] = (publication.type == "NW")
         context['update_article'] = (publication.type == "AR")
         context['comments'] = Comment.objects.filter(post_id=publication.pk)
+
+        print(publication.category)
+        context['category'] = publication
         return context
 
 
@@ -123,3 +127,11 @@ def like_dislike(request, pk):
 
 
 
+# @login_required
+# def subscribe(request):
+#     user = request.user
+#     authors_group = Group.objects.get(name='authors')
+#     if not request.user.groups.filter(name='authors').exists():
+#         authors_group.user_set.add(user)
+#         Author.objects.create(user=user)
+#     return redirect('/protect/login/')

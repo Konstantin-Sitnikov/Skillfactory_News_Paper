@@ -31,6 +31,8 @@ Post
                     <tr><td align="left">{{ post.text_news | censor }}</td></tr>
                     <tr><td align="right"> Дата публикации статьи: {{ post.date_time | date:'d M Y' }}</td></tr>
                     <tr><td align="right"> Рейтинг: {{ post.rating_post }}</td></tr>
+                    <tr><td align="right"> Категория: {{ category }}</td></tr>
+
                 </table>
             <p></p>
         </div>
