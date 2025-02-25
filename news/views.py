@@ -48,9 +48,6 @@ class PostDetail(DetailView):
         context['update_news'] = (publication.type == "NW")
         context['update_article'] = (publication.type == "AR")
         context['comments'] = Comment.objects.filter(post_id=publication.pk)
-
-        print(publication.category)
-        context['category'] = publication
         return context
 
 
