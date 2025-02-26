@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (PostList, PostDetail, PostSearch,PublicationCreate, PublicationUpdate,
                     PublicationDelete,
                     edit_delete_invalid,
-                    like_dislike,
+                    like_dislike, CategoryList, subscribe
                     )
 
 
@@ -21,6 +21,11 @@ urlpatterns = [
     path('article/<int:pk>/edit/', PublicationUpdate.as_view(), name="article_edit"),
     path('article/<int:pk>/delete/', PublicationDelete.as_view(), name="article_delete"),
     path('<int:pk>/like_dislike/', like_dislike, name="like_dislike"),
+
+    path('categories/<int:pk>', CategoryList.as_view(), name="category_list"),
+
+    path('categories/<int:pk>/subscribe', subscribe, name="subscribe"),
+
 
 
 ]

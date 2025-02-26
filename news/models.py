@@ -1,3 +1,5 @@
+from tokenize import blank_re
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -33,14 +35,10 @@ class Author(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name="categories")
 
-
-
-class UserCategory(models.Model):
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
+    def __str__(self):
+        return self.category
 
 class Post(models.Model):
     news = "NW"
