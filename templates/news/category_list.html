@@ -33,7 +33,7 @@ td {
 </style>
 
 
-    <h1>Новости</h1>
+    <h1>Новости в категории {{ category }}</h1>
 
 
 <div class="shadowbox">
@@ -77,32 +77,6 @@ td {
         </div>
 
 
-<div class="shadowbox">
-    <p></p>
-        <table border="3" cellpadding="4" cellspacing="1" width="100%">
-
-                      <tr>
-                          <td align="left" width="100%">Категории</td>
-                      </tr>
-
-
-                      <tr>
-                          {% for category in post.category.all() %}
-
-                          <td><a href="{% url 'category_list' category.id %}">{{ category }}</a></td>
-
-                          {% endfor %}
-                       </tr>
-
-                  </table>
-
-    <p></p>
-  </div>
-
-
-
-
-
         <style>
             td {
 
@@ -118,16 +92,28 @@ td {
                     <td align="left" width="10%">Заголовок</td>
                     <td align="left" width="10%">Автор</td>
                     <td align="left" width="10%">Дата</td>
+                    <td align="left" width="10%">Категория</td>
                     <td align="left" width="10%">Тип</td>
-                    <td align="left" width="50%">Статья</td>
+                    <td align="left" width="40%">Статья</td>
                     <td align="left" width="10%">Рейтинг статьи</td>
                 </tr>
 
                 {% for post in category_news_list %}
+
+
                 <tr>
                     <td><a href="{% url 'news_detail' post.pk %}">{{ post.title_news | censor }}</a></td>
                     <td>{{ post.autor_id.user }}</td>
                     <td>{{ post.date_time | date:'d M Y' }}</td>
+                    <td>
+                        {% for category in post.category.all %}
+
+                        <a href="{% url 'category_list' category.id %}"> {{category}}</a>
+
+                        {% endfor %}
+
+                    </td>
+
                     <td>{{ post.type }}</td>
                     <td>{{ post.text_news | truncatewords:20 | censor }}</td>
                     <td>{{ post.rating_post }}</td>

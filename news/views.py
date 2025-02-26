@@ -20,37 +20,6 @@ class PostList(ListView):
     paginate_by = 10
 
 
-class CategoryList(PostList):
-    model = Post
-    template_name = 'posts.html'
-    context_object_name = 'category_news_list'
-
-    def get_queryset(self):
-        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
-        print(category)
-        queryset = Post.objects.filter(category=self.category).order_by('-date_time')
-        print(queryset)
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
-        context['category'] = self.category
-        return context
-
-
-@login_required
-def subscribe(request, pk):
-    user = request.user
-    category = Category.objects.get(id=pk)
-    category.subscribers.add(user)
-
-    message = 'Вы успешно подписались на рассылку новостей категории'
-
-    return render(request, 'news/subscribe.html', {'category': category, 'message': message})
-
-
-
 
 class PostSearch(ListView):
     model = Post
@@ -72,18 +41,19 @@ class PostSearch(ListView):
 
 
 
-
 class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
+
         publication = self.get_object()
         context = super().get_context_data(**kwargs)
         context['update_news'] = (publication.type == "NW")
         context['update_article'] = (publication.type == "AR")
         context['comments'] = Comment.objects.filter(post_id=publication.pk)
+        # context['category'] = get_object_or_404(Category, id=self.kwargs['pk'])
         return context
 
 
@@ -94,15 +64,14 @@ class PublicationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     template_name = 'news/create_publication.html'
 
     def form_valid(self, form):
-
         publication = form.save(commit=False)
         author = Author.objects.get(user=self.request.user)
-        if self.request.path == "/news/create/":
 
+        if self.request.path == "/news/create/":
             publication.autor_id = author
             publication.type = "NW"
-
             return super().form_valid(form)
+
         if self.request.path == "/article/create/":
             publication.autor_id = author
             publication.type = "AR"
@@ -113,7 +82,6 @@ class PublicationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         context['create_news'] = (self.request.path == "/news/create/")
         context['create_article'] = (self.request.path == "/article/create/")
         return context
-
 
 
 class PublicationUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -158,13 +126,30 @@ def like_dislike(request, pk):
 
 
 
+class CategoryList(PostList):
+    model = Post
+    template_name = 'news/category_list.html'
+    context_object_name = 'category_news_list'
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(category=self.category).order_by('-date_time')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        context['category'] = self.category
+        return context
 
 
-# @login_required
-# def subscribe(request):
-#     user = request.user
-#     authors_group = Group.objects.get(name='authors')
-#     if not request.user.groups.filter(name='authors').exists():
-#         authors_group.user_set.add(user)
-#         Author.objects.create(user=user)
-#     return redirect('/protect/login/')
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
+
+    message = 'Вы успешно подписались на рассылку новостей категории'
+
+    return render(request, 'news/subscribe.html', {'category': category, 'message': message})
+

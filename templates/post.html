@@ -31,7 +31,18 @@ Post
                     <tr><td align="left">{{ post.text_news | censor }}</td></tr>
                     <tr><td align="right"> Дата публикации статьи: {{ post.date_time | date:'d M Y' }}</td></tr>
                     <tr><td align="right"> Рейтинг: {{ post.rating_post }}</td></tr>
-                    <tr><td align="right"> Категория: {{ category }}</td></tr>
+                    <tr>
+                        <td align="right"> Категория:</td>
+                        <td>
+                            {% for category in post.category.all %}
+
+                            <a href="{% url 'category_list' category.id %}"> {{category}}</a>
+
+                            {% endfor %}
+                        </td>
+
+                        
+                    </tr>
 
                 </table>
             <p></p>
@@ -43,33 +54,25 @@ Post
                     <tr>
                         <td align="center">
                             {% if update_news %}
-                                    <form action="{% url 'news_edit' post.pk %}">
-                                        <button>Изменить новость</button>
-                                    </form>
+                                    <form action="{% url 'news_edit' post.pk %}"> <button>Изменить новость</button> </form>
                             {% endif %}
                         </td>
 
                         <td align="center">
                             {% if update_article %}
-                                <form action="{% url 'article_edit' post.pk %}">
-                                    <button>Изменить статью</button>
-                                </form>
+                                <form action="{% url 'article_edit' post.pk %}"> <button>Изменить статью</button> </form>
                             {% endif %}
                         </td>
 
                         <td align="center">
                             {% if update_news %}
-                                    <form action="{% url 'news_delete' post.pk %}">
-                                        <button>Удалить новость</button>
-                                    </form>
+                                    <form action="{% url 'news_delete' post.pk %}"> <button>Удалить новость</button> </form>
                             {% endif %}
                         </td>
 
                         <td align="center">
                             {% if update_article %}
-                                <form action="{% url 'article_delete' post.pk %}">
-                                    <button>Удалить статью</button>
-                                </form>
+                                <form action="{% url 'article_delete' post.pk %}"> <button>Удалить статью</button> </form>
                             {% endif %}
                         </td>
 

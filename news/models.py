@@ -33,12 +33,6 @@ class Author(models.Model):
 
 
 
-class Category(models.Model):
-    category = models.CharField(max_length=64, unique=True)
-    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name="categories")
-
-    def __str__(self):
-        return self.category
 
 class Post(models.Model):
     news = "NW"
@@ -50,7 +44,7 @@ class Post(models.Model):
     autor_id = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length = 2, choices=POSITIONS, default=news)
     date_time = models.DateTimeField(auto_now_add=True)
-    category = models.ManyToManyField(Category, through="PostCategory")
+    category = models.ManyToManyField("Category", through="PostCategory")
     title_news = models.CharField(max_length = 128)
     text_news = models.TextField()
     rating_post = models.IntegerField(default = 0)
@@ -68,6 +62,14 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
+
+
+class Category(models.Model):
+    category = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name="categories")
+
+    def __str__(self):
+        return self.category
 
 
 

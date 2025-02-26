@@ -91,8 +91,9 @@ td {
                     <td align="left" width="10%">Заголовок</td>
                     <td align="left" width="10%">Автор</td>
                     <td align="left" width="10%">Дата</td>
+                    <td align="left" width="10%">Категория</td>
                     <td align="left" width="10%">Тип</td>
-                    <td align="left" width="50%">Статья</td>
+                    <td align="left" width="40%">Статья</td>
                     <td align="left" width="10%">Рейтинг статьи</td>
                 </tr>
 
@@ -101,6 +102,14 @@ td {
                     <td><a href="{% url 'news_detail' post.pk %}">{{ post.title_news | censor }}</a></td>
                     <td>{{ post.autor_id.user }}</td>
                     <td>{{ post.date_time | date:'d M Y' }}</td>
+                    <td>
+                        {% for category in post.category.all %}
+
+                        <a href="{% url 'category_list' category.id %}"> {{category}}</a>
+
+                        {% endfor %}
+                    </td>
+
                     <td>{{ post.type }}</td>
                     <td>{{ post.text_news | truncatewords:20 | censor }}</td>
                     <td>{{ post.rating_post }}</td>
