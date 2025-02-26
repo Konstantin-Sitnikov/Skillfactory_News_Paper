@@ -27,7 +27,9 @@ class CategoryList(PostList):
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        print(category)
         queryset = Post.objects.filter(category=self.category).order_by('-date_time')
+        print(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
