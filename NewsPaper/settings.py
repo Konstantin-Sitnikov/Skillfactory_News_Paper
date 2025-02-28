@@ -78,7 +78,7 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/protect/login/'
 LOGOUT_REDIRECT_URL = '/protect/logout/'
-DEFAULT_FROM_EMAIL = ''
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_EMAIL')
 
 
 SITE_ID = 1
@@ -128,15 +128,13 @@ AUTHENTICATION_BACKENDS = [
 
 ]
 
-
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'}
-
 
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
@@ -203,8 +201,8 @@ SITE_URL = 'http://127.0.0.1:8000/'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER =  os.getenv('HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('HOST_PASSWORD')  #aphvugiaaocptddd
 EMAIL_USE_SSL = True
 
 

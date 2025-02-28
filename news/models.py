@@ -32,8 +32,6 @@ class Author(models.Model):
         self.save()
 
 
-
-
 class Post(models.Model):
     news = "NW"
     article = "AR"
