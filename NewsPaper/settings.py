@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv  # Импортируем environ
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -76,6 +78,7 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/protect/login/'
 LOGOUT_REDIRECT_URL = '/protect/logout/'
+DEFAULT_FROM_EMAIL = ''
 
 
 SITE_ID = 1
@@ -194,4 +197,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+
+SITE_URL = 'http://127.0.0.1:8000/'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_SSL = True
+
 

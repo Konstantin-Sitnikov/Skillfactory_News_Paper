@@ -24,6 +24,7 @@ Post
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
 }
 
+
 td {
 
     border: 2px black
@@ -40,6 +41,18 @@ td {
             <p></p>
 
                 <table align="center">
+
+                    <tr>
+                        {% if is_not_subscriber %}
+                        <td colspan="2">
+                            <form action="{% url 'subscribe' category.pk %}" target="_blank">
+
+                                <button>Подписаться на категорию {{ category }}</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+
 
                     <tr>
                         <td colspan="2">
@@ -70,6 +83,9 @@ td {
                         </td>
 
                     </tr>
+
+
+
 
 
                 </table>
@@ -124,6 +140,8 @@ td {
         {% else %}
         <h2>Новостей нет!</h2>
         {% endif%}
+
+
 {# Добавляем пагинацию на страницу #}
 
    {# Информация о предыдущих страницах #}
