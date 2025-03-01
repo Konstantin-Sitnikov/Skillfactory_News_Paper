@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 
     'django_filters',
 
-    'news',
+    'news.apps.NewsConfig',
     "protect",
     "sign",
 
