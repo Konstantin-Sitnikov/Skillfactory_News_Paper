@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
-from unicodedata import category
+
 
 from .forms import Publication
 from .models import Post, Comment, Author, Category
@@ -67,20 +67,30 @@ class PublicationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         publication = form.save(commit=False)
         author = Author.objects.get(user=self.request.user)
 
-        if self.request.path == "/news/create/":
-            publication.autor_id = author
-            publication.type = "NW"
-            return super().form_valid(form)
+        print(author.post_count)
 
-        if self.request.path == "/article/create/":
-            publication.autor_id = author
-            publication.type = "AR"
-            return super().form_valid(form)
+        if author.post_count < 3:
+            if self.request.path == "/news/create/":
+                publication.autor_id = author
+                publication.type = "NW"
+                author.get_count()
+                return super().form_valid(form)
+    
+            if self.request.path == "/article/create/":
+                publication.autor_id = author
+                publication.type = "AR"
+                author.get_count()
+                return super().form_valid(form)
+        else:
+            message = 'Количество публикаций на сегодня закончено'
+            return render(self.request, 'news/publication_creation_error.html', {'message': message})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        author = Author.objects.get(user=self.request.user)
         context['create_news'] = (self.request.path == "/news/create/")
         context['create_article'] = (self.request.path == "/article/create/")
+        context['null_publication'] = author.post_count > 3
         return context
 
 
@@ -153,3 +163,14 @@ def subscribe(request, pk):
 
     return render(request, 'news/subscribe.html', {'category': category, 'message': message})
 
+
+@login_required
+def unsubscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.remove(user)
+    print(user)
+
+    message = 'Вы отписались от категории'
+
+    return render(request, 'news/subscribe.html', {'category': category, 'message': message})

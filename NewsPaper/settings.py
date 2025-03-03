@@ -50,12 +50,11 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     "protect",
     "sign",
-
+    'django_apscheduler',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
 
 ]
@@ -72,16 +71,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
-
-
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/protect/login/'
-LOGOUT_REDIRECT_URL = '/protect/logout/'
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_EMAIL')
-
-
-SITE_ID = 1
 
 
 MIDDLEWARE = [
@@ -128,11 +117,9 @@ AUTHENTICATION_BACKENDS = [
 
 ]
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+
+
 
 ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'}
 
@@ -197,12 +184,27 @@ STATICFILES_DIRS = [
 ]
 
 
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/protect/login/'
+LOGOUT_REDIRECT_URL = '/protect/logout/'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_EMAIL')
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
 SITE_URL = 'http://127.0.0.1:8000/'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER =  os.getenv('HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('HOST_PASSWORD')  #aphvugiaaocptddd
+EMAIL_HOST_PASSWORD = os.getenv('HOST_PASSWORD')
 EMAIL_USE_SSL = True
+
+SITE_ID = 1
+
+
 
 

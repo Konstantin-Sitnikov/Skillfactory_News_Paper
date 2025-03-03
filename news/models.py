@@ -1,5 +1,3 @@
-from tokenize import blank_re
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -8,9 +6,18 @@ from django.urls import reverse
 class Author(models.Model):
     rating_autor = models.IntegerField(default = 0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    post_count = models.IntegerField(default = 0)
 
     def __str__(self):
         return self.user.username.title()
+
+    def get_count(self):
+        self.post_count += 1
+        self.save()
+
+    def get_count_null(self):
+        self.post_count = 0
+        self.save()
 
     def update_rating(self):
         rating_post = 0
@@ -64,7 +71,7 @@ class Post(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=64, unique=True)
-    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name="categories")
+    subscribers = models.ManyToManyField(User, blank=True, related_name="categories")
 
     def __str__(self):
         return self.category
