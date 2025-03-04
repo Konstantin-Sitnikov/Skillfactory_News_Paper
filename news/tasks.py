@@ -5,9 +5,33 @@ from django.core.mail import EmailMultiAlternatives
 from .models import Author, Category, Post
 from NewsPaper.settings import SITE_URL, DEFAULT_FROM_EMAIL
 
+from celery import shared_task
+
+@shared_task()
+def send_notifications(preview, pk, titel, subscribers):
+
+    """Отправка сообщений в почту с новой новостью в категории"""
+
+    html_content = render_to_string(
+        'post_created_email.html',
+        {
+            'text': preview,
+            'link': f'{SITE_URL}/{pk}'
+
+        }
+    )
+    msg = EmailMultiAlternatives(
+        subject=titel,
+        body='',
+        from_email=DEFAULT_FROM_EMAIL,
+        to=subscribers
+
+    )
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
 
 
-
+@shared_task()
 def updating_count_post():
 
     """Задача для сброса суточного лимита публикаций"""
@@ -17,6 +41,8 @@ def updating_count_post():
         author.get_count_null()
 
 
+
+@shared_task()
 def weekly_newsletter():
 
     """Еженедельная рассылка новостей подписчикам"""
@@ -46,8 +72,9 @@ def weekly_newsletter():
     msg.send()
 
 
-# функция, которая будет удалять неактуальные задачи
-def delete_old_job_executions(max_age=604_800):
-    """This job deletes all apscheduler job executions older than `max_age` from the database."""
-    DjangoJobExecution.objects.delete_old_job_executions(max_age)
-
+#
+# # функция, которая будет удалять неактуальные задачи
+# def delete_old_job_executions(max_age=604_800):
+#     """This job deletes all apscheduler job executions older than `max_age` from the database."""
+#     DjangoJobExecution.objects.delete_old_job_executions(max_age)
+#
