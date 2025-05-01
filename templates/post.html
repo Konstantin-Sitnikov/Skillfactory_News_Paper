@@ -1,0 +1,152 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+<!-- Название у нас будет Product -->
+{% block title %}
+Post
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+<h1>{{ post.title_news | censor }}</h1>
+
+<style>
+
+.shadowbox {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #333;
+  box-shadow: 8px 8px 5px #444;
+  padding: 8px 12px;
+  background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+}
+
+
+</style>
+        <div class="shadowbox">
+            <p></p>
+                <table align="center">
+                    <tr><td align="left">{{ post.text_news | censor }}</td></tr>
+                    <tr><td align="right"> Дата публикации статьи: {{ post.date_time | date:'d M Y' }}</td></tr>
+                    <tr><td align="right"> Рейтинг: {{ post.rating_post }}</td></tr>
+                    <tr>
+                        <td align="right"> Категория:</td>
+                        <td>
+                            {% for category in post.category.all %}
+
+                            <a href="{% url 'category_list' category.id %}"> {{category}}</a>
+
+                            {% endfor %}
+                        </td>
+
+                        
+                    </tr>
+
+                </table>
+            <p></p>
+        </div>
+
+        <div class="shadowbox">
+            <p></p>
+                <table align="center">
+                    <tr>
+                        <td align="center">
+                            {% if update_news %}
+                                    <form action="{% url 'news_edit' post.pk %}"> <button>Изменить новость</button> </form>
+                            {% endif %}
+                        </td>
+
+                        <td align="center">
+                            {% if update_article %}
+                                <form action="{% url 'article_edit' post.pk %}"> <button>Изменить статью</button> </form>
+                            {% endif %}
+                        </td>
+
+                        <td align="center">
+                            {% if update_news %}
+                                    <form action="{% url 'news_delete' post.pk %}"> <button>Удалить новость</button> </form>
+                            {% endif %}
+                        </td>
+
+                        <td align="center">
+                            {% if update_article %}
+                                <form action="{% url 'article_delete' post.pk %}"> <button>Удалить статью</button> </form>
+                            {% endif %}
+                        </td>
+
+                        <td align="center">
+                            <form action="{% url 'news_list' %}">
+                                <button>На главную</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            <p></p>
+        </div>
+
+        <div class="shadowbox">
+            <p></p>
+                <table align="center">
+                    <tr>
+                        <td align="center">
+                            <form action="{% url 'like_dislike' post.pk %}" method="post">
+                                        {% csrf_token %}
+                                <input type="hidden" name="like" value="like">
+                                <input type="submit" value="like">
+                            </form>
+
+
+                            <form action="{% url 'like_dislike' post.pk %}" method="post">
+                                        {% csrf_token %}
+                                <input type="hidden" name="dislike" value="dislike">
+                                <input type="submit" value="dislike">
+                            </form>
+                        </td>
+
+                    </tr>
+                </table>
+            <p></p>
+        </div>
+
+
+
+<div>
+    <p>
+        {% if comments %}
+            <table border="3" cellpadding="4" cellspacing="1">
+                <tr>
+                    <td align="left">Текст комментария</td>
+                    <td align="left">Дата</td>
+                    <td align="left">Автор</td>
+                    <td align="left">Рейтинг комментария</td>
+                </tr>
+
+                {% for comment in comments%}
+                <tr>
+
+                    <td>{{ comment.text_comment }}</td>
+                    <td>{{ comment.date_time | date:'d M Y' }}</td>
+                    <td>{{ comment.user_id }}</td>
+                    <td>{{ comment.rating_comments }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+        <h2>Комментариев нет!</h2>
+        {% endif%}
+
+    </p>
+</div>
+<div>
+    <form action="{% url 'create_comment' post.pk %}" method="post">
+        {% csrf_token %}
+        <textarea name="text" style="width:250px;height:150px;"></textarea>
+        <input type="submit" value="Оставить комментарий">
+    </form>
+</div>
+
+
+{% endblock content %}

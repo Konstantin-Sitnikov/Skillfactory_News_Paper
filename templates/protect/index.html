@@ -1,0 +1,50 @@
+{% extends "main.html" %}
+
+{% block content %}
+<table border="3" width="100%">
+        <tr>
+                <td align="left" width="60%"><h3>Страница авторизованного пользователя {{request.user.username}}</h3></td>
+
+                <td align="center" width="20%"><button> <a href="/accounts/logout/">Выйти</a> </button></td>
+
+                <td align="center" width="20%">
+                        <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit">Sign/logout</button>
+                        </form>
+                </td>
+
+
+
+        </tr>
+</table>
+
+
+<div> Здесь может содержаться персональная информация для каждого пользователя </div>
+
+{% if is_not_authors %}
+<button> <a href="/protect/upgrade/">Хочу стать автором!</a> </button>
+
+
+
+{% else%}
+<div>
+        <h1> Вы автор!!!! </h1>
+
+</div>
+
+{% endif %}
+
+
+<form action="/" target="_blank">
+
+        <button>На главную</button>
+</form>
+
+
+{% endblock %}
+
+
+
+
+

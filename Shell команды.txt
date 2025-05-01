@@ -1,0 +1,120 @@
+﻿import 
+from django.contrib.auth.models import User
+from news.models import *
+
+
+создание пользователей:
+User.objects.create_user('Пользователь1')
+User.objects.create_user('Пользователь2')
+
+
+создание авторов
+
+Author.objects.create(user=user1)
+Author.objects.create(user=user2)
+
+
+
+создание категорий
+Category.objects.create(category='Спорт')
+Category.objects.create(category='IT NEWS')
+Category.objects.create(category='Политика')
+Category.objects.create(category='Погода')
+Category.objects.create(category='Экономика')
+
+
+созданиие новостей,
+
+post1 = Post.objects.create(autor_id=author1, type="NW", title_news="Тест preview", text_news="большой текст" )
+
+Post.objects.create(autor_id=author1, type="NW", title_news="Политика-Экономика ", text_news="какая то новость" )
+Post.objects.create(autor_id=author1, type="NW", title_news="Погода", text_news="Новости погоды" )
+Post.objects.create(autor_id=author2, type="NW", title_news="Новости IT", text_news="Последние новости в IT" )
+Post.objects.create(autor_id=author2, type="AR", title_news="Статья Спорт", text_news="Статья про спорт" )
+Post.objects.create(autor_id=author1, type="AR", title_news="Статья Экономика ", text_news="небольшая статья" )
+Post.objects.create(autor_id=author2, type="NW", title_news="Политика-IT", text_news="Что то с IT и политикой" )
+
+создание связей пост-категория
+
+PostCategory.objects.create(post_id=post1, category_id=sport)
+PostCategory.objects.create(post_id=post1, category_id=politics)
+
+PostCategory.objects.create(post_id=politics_economics, category_id=politics)
+PostCategory.objects.create(post_id=politics_economics, category_id=economics)
+PostCategory.objects.create(post_id=weather_news, category_id=weather)
+PostCategory.objects.create(post_id=it_news, category_id=it)
+PostCategory.objects.create(post_id=article_sport, category_id=sport)
+PostCategory.objects.create(post_id=article_economics, category_id=economics)
+PostCategory.objects.create(post_id=politics_it, category_id=it)
+PostCategory.objects.create(post_id=politics_it, category_id=politics)
+
+
+создание коментария
+
+Comment.objects.create(post_id = post1, user_id = user1, text_comment = "Какой-то комтарий")
+
+Comment.objects.create(post_id = politics_economics, user_id = user1, text_comment = "Политико-Экономический коментарий пользователя 1")
+Comment.objects.create(post_id = politics_economics, user_id = user2, text_comment = "Политико-Экономический коментарий пользователя 2")
+
+Comment.objects.create(post_id = weather_news, user_id = user1, text_comment = "Погодный коментарий пользователя 1")
+Comment.objects.create(post_id = article_sport, user_id = user2, text_comment = "Спортивный коментарий пользователя 2")
+
+Comment.objects.create(post_id = it_news, user_id = user1, text_comment = "IT коментарий пользователя 1")
+Comment.objects.create(post_id = it_news, user_id = user2, text_comment = "IT коментарий пользователя 2")
+
+
+получение новостей из БД
+
+test_preview = Post.objects.get(title_news="Тест preview")
+politics_economics = Post.objects.get(title_news="Политика-Экономика ")
+weather_news = Post.objects.get(title_news="Погода")
+it_news = Post.objects.get(title_news="Новости IT")
+article_sport = Post.objects.get(title_news="Статья Спорт")
+article_economics = Post.objects.get(title_news="Статья Экономика ")
+politics_it = Post.objects.get(title_news="Политика-IT")
+
+
+
+получение категорий
+
+sport = Category.objects.get(category='Спорт')
+it = Category.objects.get(category='IT NEWS')
+politics = Category.objects.get(category='Политика')author.
+weather = Category.objects.get(category='Погода')
+economics = Category.objects.get(category='Экономика')
+
+
+
+получение авторов из БД
+
+author1 = Author.objects.get(pk=1)
+author2 = Author.objects.get(pk=2)
+
+
+получение пользователей из БД
+
+user1 = User.objects.get(pk=1) 
+user2 = User.objects.get(username="Пользователь2")
+
+
+
+
+
+Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+
+Author.objects.all().order_by('-rating_autor').values('rating_autor', 'user__username')[0]
+ 
+Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
+
+top_post = Post.objects.all().order_by('-rating_post')[0]  
+top_post.date_time.strftime("%Y-%m-%d %H:%M:%S")
+top_post.autor_id.user.username
+top_post.title_news
+top_post.preview()
+
+Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+
+comments_top_post = Comment.objects.filter(post_id=top_post.pk)
+
+comments_top_post.values('user_id__username', 'date_time', 'rating_comments', 'text_comment')
+
